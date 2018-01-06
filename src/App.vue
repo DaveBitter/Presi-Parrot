@@ -17,9 +17,13 @@ export default {
   },
   data() {
     return{
-      mode: 'active'
+      mode: 'idle'
     }
-  }
+  },
+	created() {
+		this.$on('startParrot', () => this.mode = 'active')
+		this.$on('stopParrot', () => this.mode = 'idle')
+	}
 }
 </script>
 

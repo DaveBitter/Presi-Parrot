@@ -2,9 +2,10 @@
   <section id='idle-component'>
     <article>
       <header>
-        <HelperText :text='"Press start to start Presi Parrot"' />
+        <HelperText :text='"Press the microphone to start Presi Parrot"' />
       </header>
       <main>
+				<img id='start' src='../assets/microphone.svg' v-on:click='startParrot' />
       </main>
     </article>
   </section>
@@ -20,7 +21,12 @@
     data () {
       return {
      }
-    }
+    },
+		methods: {
+			startParrot() {
+				this.$parent.$emit('startParrot')
+			}
+		}
 }
 </script>
 
@@ -30,22 +36,22 @@
     justify-content: center;
   }
 
-  main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+	img#start {
+		position: absolute;
+		right: 40vw;
+		bottom: 10vh;
+		left: 40vw;
+		width: 20vw;
+		height: 20vw;
+		cursor: pointer;
+		transition: 66ms ease-out;
+	}
 
-  h1 {
-    font-size: 2em;
-  }
-
-  h2 {
-    font-size: 1.6em;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
+	img#start:hover {
+		right: 38vw;
+		bottom: 8vh;
+		left: 38vw;
+		width: 24vw;
+		height: 24vw;
+	}
 </style>

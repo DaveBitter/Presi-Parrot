@@ -10,9 +10,10 @@
     </article>
     <article v-else='transcriptions.length'>
       <section>
-        <HelperText :text='"Start talking to see your transcriptions"' />
+        <HelperText v-show='!liveTranscription' :text='"Start talking to see your transcriptions"' />
       </section>
     </article>
+		<img id='stop' src='../assets/stop.svg' v-on:click='stopParrot' />
   </section>
 </template>
 
@@ -55,11 +56,6 @@
         })
         recognition.start();
       },
-      endParrot() {
-        recognition.stop()
-        this.mode = 'idle'
-        this.transcriptions = []
-      },
       handleTranscription(event, cb) {
         const transcription = Array.from(event.results)
           .map(result => result[0])
@@ -75,6 +71,10 @@
 					this.liveTranscription = transcription
 				}
       },
+			stopParrot() {
+				this.transcriptions = []
+				this.$parent.$emit('stopParrot')
+			}
     },
     created() {
       this.startParrot()
@@ -85,7 +85,7 @@
 <style scoped>
 	article#live-transcription {
 		font-size: 1.6em;
-    width: 30em;
+    width: 50vw;
     margin: .5em 2em;
     padding: 1em;
     background-color: #FFFFFF;
@@ -105,4 +105,22 @@
     margin: 0;
   }
 
+	img#stop {
+		position: absolute;
+		right: 45vw;
+		bottom: 5vh;
+		left: 45vw;
+		width: 10vw;
+		height: 10vw;
+		cursor: pointer;
+		transition: 66ms ease-out;
+	}
+
+	img#stop:hover {
+		right: 38vw;
+		bottom: 3vh;
+		left: 43vw;
+		width: 14vw;
+		height: 14vw;
+	}
 </style>
