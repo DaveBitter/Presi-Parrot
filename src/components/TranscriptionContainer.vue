@@ -1,13 +1,16 @@
 <template>
   <section id='transcription-container'>
-    <article v-if='transcriptions.length'>
-      <section v-for='transcription in transcriptions'>
+		<article v-show='liveTranscription || transcriptions.length' id='live-transcription'>
+			<p>{{ liveTranscription }}</p>
+		</article>
+    <article id='historical-transcriptions' v-if='transcriptions.length'>
+      <section  v-for='transcription in transcriptions'>
         <TranscriptionComponent :transcription='transcription' />
       </section>
     </article>
     <article v-else='transcriptions.length'>
       <section>
-        <HelperText :text='"Start talking to see you transcriptions"' />
+        <HelperText :text='"Start talking to see your transcriptions"' />
       </section>
     </article>
   </section>
@@ -25,6 +28,7 @@
     },
     data () {
       return {
+				liveTranscription: null,
         transcriptions: [
         ],
         mode: null,
@@ -57,14 +61,19 @@
         this.transcriptions = []
       },
       handleTranscription(event, cb) {
-        const transcript = Array.from(event.results)
+        const transcription = Array.from(event.results)
           .map(result => result[0])
           .map(result => result.transcript)
           .join('');
 
+				console.log(transcription)
+
         if (event.results[0].isFinal) {
-         this.transcriptions.unshift(transcript)
-        }
+					this.liveTranscription = ''
+        	this.transcriptions.unshift(transcription)
+        } else {
+					this.liveTranscription = transcription
+				}
       },
     },
     created() {
@@ -74,12 +83,21 @@
 </script>
 
 <style scoped>
-  section {
-    max-height: 95vh;
+	article#live-transcription {
+		font-size: 1.6em;
+    width: 30em;
+    margin: .5em 2em;
+    padding: 1em;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	}
+
+  article#historical-transcriptions {
+    max-height: 75vh;
     overflow-y: auto;
   }
 
-  section::-webkit-scrollbar {
+  article#historical-transcriptions::-webkit-scrollbar {
     display: none;
   }
 
